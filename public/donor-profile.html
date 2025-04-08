@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+
+
+  <script>
+    function doPrev(refFile, prevImg) {
+      const [file] = refFile.files
+      if (file) {
+        prevImg.src = URL.createObjectURL(file)
+      }
+    }
+    //==========================
+    $(document).ready(function () {
+
+var au = localStorage.getItem("active");
+$("#txtEmail").val(au).prop("readonly",true);
+
+      // =============================================
+
+      //$("#txtEmail").blur(function(){
+
+      //var emailKu=$(this).val();
+      //var obj={
+      //type:"get",
+      // url: "/chk-email",
+      //data:{
+      //  kuchEmail:emailKu
+      // }
+      //  }
+
+
+      // $.ajax(obj).done(function(respKuch){
+      //  //alert(respKuch);
+      //  $("#res").html(respKuch);
+      //   }).fail(function(errKuch){
+      //alert(errKuch);
+      //      $("#res").html(respKuch);
+      //   })
+
+      // }); 
+
+      //========================
+      // $(document).ajaxStart(function(){
+      //  $("#wait").css("display","block");
+      // });
+
+      // $(document).ajaxStop(function(){
+      //   $("#wait").css("display","none");
+      // });
+
+      //============================================
+
+      $("#btnSearch").click(doSearch);
+      function doSearch() {
+        var emailKu = $("#txtEmail").val();
+        // alert(emailKu);
+        var obj = {
+          type: "get",
+          url: "/get-json-record",
+          data: {
+            kuchEmail: emailKu
+          }
+        }
+
+        $.ajax(obj).done(function (respJSONKuch) 
+        {
+
+          if(respJSONKuch.length==0)
+          {
+            alert("You have no account");
+            $("#btnsts").prop("disabled", false);
+            $("#doUpdate").prop("disabled",true);
+          }
+          else{
+          // alert(JSON.stringify(respJSONKuch));
+          $("#txtName").val(respJSONKuch[0].name);
+          $("#txtContact").val(respJSONKuch[0].mobile);
+          $("#txtAddress").val(respJSONKuch[0].address);
+          $("#txtCity").val(respJSONKuch[0].city);
+          $("#txtidproof").val(respJSONKuch[0].idproof);
+          $("#hdn").val(respJSONKuch[0].picname);
+          $("#pic2").val(respJSONKuch[0].picname);
+          var av=respJSONKuch[0].avail.split("-");
+          // alert(av);
+          $("#txtfrom").val(av[0]);
+          $("#txtto").val(av[1]);
+
+          $("#imgPrev").prop("src","uploads/"+ respJSONKuch[0].picname);
+          
+
+            $("#btnsts").prop("disabled",true);
+
+            $("#doUpdate").prop("disabled", false);
+
+        }
+
+
+
+        })
+      }
+
+    });
+
+  </script>
+
+  <!-- <style>
+      #wait{
+        display: none;;
+      }
+    </style> -->
+
+</head>
+
+<body>
+  <div>
+    <nav class="navbar bg-body-tertiary" style="height: 80px;">
+        <div class="container-fluid"style="background-color: cornflowerblue">
+          <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+          <form class="d-flex" role="search">
+            <!-- <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button> -->
+            <!-- <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button" id="logoutbtn"  >Logout</button> -->
+          </form>
+        </div>
+      </nav>
+    </div>
+
+  <div class="container">
+    <br><br><br>
+    <form class="row g-3" enctype="multipart/form-data" method="post">
+      <input type="hidden" id="hdn" name="hdn">
+      <center>
+        <h1>Profile Form </h1>
+      </center>
+      <div class="col-md-9">
+        <label for="inputEmail4" class="form-label">Email</label>
+        <span id="res">*</span>
+        <input type="email" class="form-control" id="txtEmail" name="txtEmail">
+      </div>
+      <div class="col-md-2 " style="margin-top: 45px;">
+        <input type="button" id="btnSearch" class="btn btn-primary" value="Search">
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">Name</label>
+        <input type="text" class="form-control" name="txtName" placeholder="Name" id="txtName">
+      </div>
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">Mobile</label>
+        <input type="text" class="form-control" name="txtContact" id="txtContact">
+      </div>
+
+      <div class="col-9">
+        <label for="inputAddress" class="form-label">Address</label>
+        <input type="text" class="form-control" name="txtAddress" id="txtAddress" placeholder="1234 Main St">
+      </div>
+
+      <div class="col-md-3">
+        <label for="inputCity" class="form-label">City</label>
+        <select class="form-select" id="txtCity" name="txtCity">
+          <option value="Bathinda">Bathinda</option>
+          <option value="Patiala">Patiala</option>
+          <option value="Chandigarh">Chandigarh</option>
+        </select>
+      </div>
+
+
+      <div class="col-md-2">
+        <label for="inputZip" class="form-label">Id Proof</label>
+        <select class="form-select" name="idproof" id="txtidproof">
+          <option value="Aadhar Card">Aadhar Card</option>
+          <option value="Pan Card">Pan Card</option>
+          <option value="Voter Card">Voter Card</option>
+          <option value="Driving Licence">Driving Licence</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="inputZip" class="form-label">Id Proof Pic</label>
+        <input type="file" onchange="doPrev(this,imgPrev)" class="form-control" id="txtid" name="ppic" accept="image/*">
+        <input type="text" name="pic2" id="pic2" hidden> 
+
+      </div>
+      <div class="col-md-4">
+        <label for="inputZip" class="form-label">Preview</label>
+        <img id="imgPrev" alt=""  width="100" height="100"
+        style="border-radius: 20px; box-shadow: 0px  0px 10px 2px gray;">
+        
+      </div>
+
+      <div class="col-12">
+        <label for="inputZip" class="form-label">Availability Hours</label>
+        &nbsp;&nbsp;from
+        <select name="txtfrom" id="txtfrom">
+          <option value="9&nbsp;&nbsp;am">9&nbsp;&nbsp;am</option>
+          <option value="10 am">10 am</option>
+          <option value="11 am">11 am</option>
+          <option value="12 am">12 pm</option>
+          <option value="1&nbsp;&nbsp;pm">1&nbsp;&nbsp;pm</option>
+          <option value="2&nbsp;&nbsp;pm">2&nbsp;&nbsp;pm</option>
+        </select>
+        &nbsp;&nbsp;to
+        <select name="txtto" id="txtto">
+          <option value="1&nbsp; pm">1&nbsp; pm</option>
+          <option value="2&nbsp; pm">2&nbsp; pm</option>
+          <option value="3&nbsp; pm">3&nbsp; pm</option>
+          <option value="4&nbsp; pm">4&nbsp; pm</option>
+          <option value="5&nbsp; pm">5&nbsp; pm</option>
+          <option value="6&nbsp; pm">6&nbsp; pm</option>
+          <option value="7&nbsp; pm">7&nbsp; pm</option>
+        </select>
+      </div>
+
+      <div class="col-md-1"> <br>
+        <button type="submit" class="btn btn-primary" formaction="/insert-donor-profile"  id="btnsts" disabled>Save</button>
+      </div>
+
+      <div class="col-md-1"> <br>
+        <button type="submit" id="doUpdate" class="btn btn-primary" formaction="/update-donor-profile"  disabled>Update</button>
+
+      </div>
+
+    </form>
+  </div>
+  <br><br><br><br>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

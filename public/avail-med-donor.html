@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <script>
+        function doPrev(refFile,prevImg)
+        {
+            const [file] = refFile.files
+            if (file) {
+              prevImg.src = URL.createObjectURL(file)
+            }
+        }
+        $(document).ready(function(){
+            
+          var au = localStorage.getItem("active");
+$("#txtEmail").val(au).prop("readonly",true);
+          
+          $("#avail").click(function () {
+        var emailKu = $("#txtEmail").val();
+        var MNKu = $("#txtMedName").val();
+        var expKu = $("#txtExp").val();
+        var packKu = $("#txtPacking").val();
+        var qtyKu = $("#txtQty").val();
+        // alert();
+
+        var obj = {
+          type: "get",
+          url: "/avail-process",
+          data: {
+            kuchEmail: emailKu,
+             kuchMedName:MNKu,
+             kuchExp:expKu,
+             kuchPack:packKu,
+             kuchQty:qtyKu
+          }
+        }
+        $.ajax(obj).done(function (respKuch) {
+          // alert(respKuch);
+          $("#availmed").html(respKuch);
+
+        }).fail(function (errKuch) {
+          // alert(errKuch);
+          $("#availmed").html(respKuch);
+
+        })
+
+
+      });
+        })
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <div>
+      <nav class="navbar bg-body-tertiary" style="height: 80px;">
+          <div class="container-fluid"style="background-color: cornflowerblue">
+            <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+            <form class="d-flex" role="search">
+              <!-- <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button> -->
+              <!-- <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button" id="logoutbtn"  >Logout</button> -->
+            </form>
+          </div>
+        </nav>
+      </div>
+
+    <div class="container">
+        <br><br><br>
+        <form class="row g-3" enctype="multipart/form-data" method="get" >
+      
+            <h1>Medicine Details </h1>
+            <div class="col-md-9">
+              <label for="inputEmail4" class="form-label">Email</label>
+              <input aria-label="email" type="email" class="form-control" name="txtEmail" id="txtEmail"> 
+            </div>
+              
+            <div class="col-md-6">
+              <label for="inputPassword4" class="form-label">Med. Name</label>
+              <input aria-label="email" type="text" class="form-control" name="txtMedName" id="txtMedName">
+            </div>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Exp. Date</label>
+                <input aria-label="email" type="date" class="form-control" name="txtExp" id="txtExp">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="inputZip" class="form-label">Packing Type</label>
+                <select aria-label="email" class="form-select" name="txtPacking" id="txtPacking">
+                    <option selected>Choose...</option>
+                    <option value="bottle">Bottles</option>
+                    <option value="Sachet Packing">Sachet Packing</option>
+                    <option value="Strip Packing">Strip Packing</option>
+                  </select>
+              </div>
+              <div class="col-md-2">
+                <label for="inputPassword4" class="form-label">Quantity</label>
+                <input aria-label="email" type="number" class="form-control" name="txtQty" id="txtQty">
+              </div>
+              
+              
+              <div class="col-md-11">
+                <button type="button" class="btn btn-primary" formaction="/avail-process"  id="avail">Avail Med.</button>
+                <span id="availmed"></span>
+              </div>
+              
+        </form>
+
+
+    </div>
+    
+  </body>
+</html>

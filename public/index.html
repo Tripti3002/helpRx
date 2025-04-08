@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+    <title> Index</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <script>
+
+        //function doSetInterval()
+        {
+           // const myCarouselElement=document.querySelector("#carouselExampleIndicators");
+
+           //const carousel = new bootstrap.Carousel(myCarouselElement, {interval: 1500 })
+          
+        } 
+        $(document).ready(function () {
+
+            $("#txtEmail").blur(function () {
+        var Email = $(this).val();
+
+
+        var obj = {
+          type: "get",
+          url: "/chk-email",
+          data: {
+            email: Email
+          }
+        }
+        $.ajax(obj).done(function (respKuch) {
+          // alert(respKuch);
+          if(respKuch=="Available....!!!!")
+          $("#res").css("color","green");
+        else
+        $("#res").css("color","red");
+          $("#res").html(respKuch);
+
+        }).fail(function (errKuch) {
+          // alert(errKuch);
+          $("#res").html(respKuch);
+
+        })
+
+
+      });
+
+
+
+
+            $("#btnSignup").click(function () {
+                var Email = $("#txtEmail").val();
+                var Pwd = $("#txtPwd").val();
+                var Type = $("#seltype").val();
+                    if($("#errPwd").html()!="PWd format is ok")
+                    {
+                       alert("Please Set a Strong Password");
+                       return;
+                    }
+                   if($("#res").html()!="Available....!!!!")
+                   {
+                    alert("Email-Id Already Taken");
+                       return;
+                   }
+                   if($("#errEmail").html()!="Email format is ok")
+                   {
+                    alert("Please Enter a valid Email-Id");
+                       return;
+                   }
+
+                var obj = {
+                    type: "get",
+                    url: "/db-signup",
+                    data: {
+                        email: Email,
+                        pwd: Pwd,
+                        type: Type,
+                    }
+                }
+
+                $.ajax(obj).done(function (err) {
+                    $("#SignupPage").html(err);
+                }).fail(function (err) {
+                    $("#SignupPage").html(err);
+                })
+            });
+            //==================================================
+
+            $("#btnLogin").click(function () {
+                var Email = $("#Form-email").val();
+                var Pwd = $("#Form-pass").val();
+           
+                var obj = {
+                    type: "get",
+                    url: "/db-login",
+                    data: {
+                        email: Email,
+                        pwd: Pwd,
+                    }
+                }
+
+                $.ajax(obj).done(function (response) {
+                    // alert($("#Form-email").val());
+                    localStorage.setItem("active",$("#Form-email").val());
+                    alert(response);
+                    if (response == "Donor Logined") {
+                        location.href = "dash-donor.html";
+                    }
+                    else if (response == "Needy Logined") {
+                        location.href = "dash-needy.html";
+                    }
+                    else if (response == "Admin Logined") {
+                        location.href = "dash-admin.html";
+                    }
+                    
+                    else {
+                        $("#LoginPage").html("Plz Check Your Email Id");
+                    }
+                }).fail(function (msgerr) {
+                    $("#LoginPage").html(msgerr);
+                })
+            })
+            //=======================
+            $("#txtEmail").blur(function(){
+
+var r=/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/   ;
+var email=$("#txtEmail").val();
+if(r.test(email)==true)
+{
+    $("#errEmail").html("Email format is ok");
+    $("#errEmail").css("color","green");
+}
+else
+{
+    $("#errEmail").html("Invalid email Format").css("color","red");
+}
+});
+
+$("#txtPwd").blur(function(){
+var r=/(?=^.{8,}$)(?=.\d)(?=.[!@#$%^&]+)(?![.\n])(?=.[A-Z])(?=.[a-z]).$/;
+ var passwd=$("#txtPwd").val();
+ if(r.test(passwd)==true){
+    $("#errPwd").html("PWd format is ok").css("color","green");
+ }
+ else
+ {
+     $("#errPwd").html("Password Must contain no's,capital letter,special Symbol etc.").css("color","red");
+ }
+    
+
+})
+        });
+        
+    </script>
+     <style>
+        .card{
+          transition: ease all 1s;
+          box-shadow: 0px 0px 10px gray;
+        }
+        .card:hover{
+             transform: scale(.9);
+          box-shadow: 0px 0px 10px lightseagreen;
+    
+             transition: ease all 1s;
+        }
+      </style>
+</head>
+
+<body >
+    <!-- <nav style="background-color: white;" class="navbar navbar-expand-lg  fixed-top">
+        <div class="container-fluid" style="font-weight:bolder;">
+            <a class="navbar-brand text-black" href="#">HelpRx</a>
+            <div class="collapse navbar-collapse" id="navbarSupportContent" style="margin-left:550px;">
+                <form class="d-flex" role="search">
+                    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#signupModal"
+                        style="margin-right:50px">Signup</button>
+                </form>
+
+                <form class="d-flex" role="search">
+                    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#LoginModal"
+                        style="margin-right:50px">Login</button>
+                </form>
+            </div>
+        </div>
+    </nav> -->
+
+<div>
+    <nav class="navbar bg-body-tertiary" style="height: 80px;">
+        <div class="container-fluid">
+          <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+          <form class="d-flex" role="search">
+            <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
+            <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button"  data-bs-toggle="modal" data-bs-target="#LoginModal">Login</button>
+          </form>
+        </div>
+      </nav>
+    </div>
+      
+
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="pics/main 1.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/main 3.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/c2.jpg" class="d-block w-100" alt="...">
+          </div>
+       </div>
+       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+<!-- 
+      <div class="row ">
+        <div style="background-color: gray;" class="col-md-12">
+            <center>
+                <h4 style="color:cornflowerblue;"> Our Services</h4>
+            </center>
+        </div>
+    </div> -->
+
+    <br> <br>
+    <center><img  src="pics/our services 2.png" alt="" ></center>
+
+    <br><br>
+
+    <div class="row mt-3">
+        <div class="col-md-10  offset-md-1">
+             <!-- having 12 cols space  -->
+            <div class="row">
+                <div class="col-md-3 ">
+                  <div class="card">
+                      <img src="pics//istockphoto-1055213784-612x612.jpg" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5>Donation</h5>
+                        <p class="card-text">Generosity enriches lives, donate to support causes you believe in and make a positive impact.You can save  life,by your surplus med.</p>
+                      </div>
+                    </div>
+              </div>
+              <div class="col-md-3 ">
+                  <div class="card">
+                      <img src="pics/non_profit_icon-e1556925093633.png" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5>Needy</h5>
+                        <p class="card-text">Access to essential medicine is vital for health,
+                           dignity, and survival in communities worldwide... we help needy to save their life........</p>
+                      </div>
+                    </div>
+              </div>
+              <div class="col-md-3 ">
+                  <div class="card">
+                      <img src="pics/n-p-o.jpg" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5>Non-profit Org.</h5>
+                        <p class="card-text">Non-profit organizations serve the public good, addressing various social, environmental, and humanitarian issues with no profit motive.</p>
+                      </div>
+                    </div>
+              </div>
+
+              <div class="col-md-3 ">
+                  <div class="card">
+                      <img src="pics/istockphoto-899130218-612x612.jpg" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5>Terms & Conditions</h5>
+                        <p>Terms & Conditions outline the rules and agreements users must follow them.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tc">
+                          Read More..
+                        </button>
+                        
+                      </div>
+                    </div>
+              </div>
+              </div>
+              
+
+          </div>
+
+  </div>
+
+<br><br><br>
+
+<center>
+<img src="pics/reach us.png" alt="">
+<hr align="center" width="300">
+<br><br>
+<div style="height: 450px; ">
+  <img src="pics/follow us.png" style="float: left; margin-left: 400px; margin-right: 100px;" alt="">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3447.8805715996295!2d74.9497478103117!3d30.211955910511076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391732a4f07278a9%3A0x4a0d6293513f98ce!2sBanglore%20Computer%20Education!5e0!3m2!1sen!2sin!4v1689869340721!5m2!1sen!2sin" width="400" height="400" style="border:0;float: left; border-radius: 30px; box-shadow: 0px 0px 20px gray;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<br><br>
+<img src="pics/THANKS FOR VISITING OUR WEBSITE (1).png" width="100%" alt="">
+</center> 
+
+
+<!-- Modal -->
+<div class="modal fade" id="tc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Terms & Conditions</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        
+  Welcome to our medicine donation website! We are thrilled to have you here, and by using our platform, you agree to contribute to our shared vision of making healthcare accessible to those in need. When donating medicine, we kindly request that you ensure the items are safe, unexpired, and kept within their original packaging. Your donations will be examined for authenticity and condition, so they can effectively benefit the recipients.
+  
+  In our efforts to uphold the integrity of this charitable initiative, we sincerely urge donors to refrain from contributing any controlled or illegal substances. Our primary aim is to foster a sense of compassion and support within the community while promoting non-commercial usage of donated medicine.
+  
+  At our core, we prioritize privacy and confidentiality. Rest assured that any personal information you provide will be handled responsibly and in accordance with our privacy policy. We are committed to safeguarding your data and will not share it with any third parties without obtaining your explicit consent.
+  
+  Kindly take a moment to familiarize yourself with our terms and conditions, as they outline essential guidelines for using the platform. By adhering to these terms, you help ensure a safe, efficient, and respectful environment for all users.
+  
+  As we strive to create a seamless user experience, we may periodically update or modify these terms and conditions. In such instances, you will be promptly notified of any significant changes to stay informed and well-guided.
+  
+  If, at any point, you encounter issues or have questions, our dedicated support team is here to assist you. Your satisfaction and the success of our endeavor is of utmost importance to us, and we value your active participation in this philanthropic journey.
+  
+  Thank you for choosing to be a part of this remarkable initiative! Together, we can positively impact the lives of countless individuals and communities in need. Let's join hands in fostering a brighter and healthier future for all
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+<!-- <br><br>
+<div class="col-12 ms-5 mt-4">
+    <div class="card ms-5" style="width: 15rem; float: left;">
+      <img src="pics//istockphoto-1055213784-612x612.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5>Donation</h5>
+        <p class="card-text">Generosity enriches lives, donate to support causes you believe in and make a positive impact.You can save  life,by your surplus med.</p>
+      </div>
+    </div>
+    <div class="card ms-5" style="width: 15rem; float: left;">
+      <img src="pics/non_profit_icon-e1556925093633.png" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5>Needy</h5>
+        <p class="card-text">Access to essential medicine is vital for health,
+           dignity, and survival in communities worldwide... we help needy to save their life........</p>
+      </div>
+    </div>
+    <div class="card ms-5" style="width: 15rem; float: left;">
+      <img src="pics/n-p-o.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5>Non-profit Org.</h5>
+        <p class="card-text">Non-profit organizations serve the public good, addressing various social, environmental, and humanitarian issues with no profit motive.</p>
+      </div>
+    </div>
+    <div class="card ms-5 mb-5" style="width: 15rem; float: left;">
+      <img src="pics/istockphoto-899130218-612x612.jpg" width="100" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5>Terms & Conditions</h5>
+        <p>Terms & Conditions outline the rules and agreements users must follow them.</p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tc">
+          Read More..
+        </button>
+        
+      </div>
+    </div>
+  
+  </div>
+   -->
+
+    
+
+    
+    <!-- ==================================================================================== -->
+    <form>
+        <div class="modal fade " id="signupModal" tabindex="-1" aria-labelledby="SignupPage" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="SignupPage">Fill your details below</h1>
+                        <button type="button" data-bs-dismiss="modal" class="btn-close" data-bs-dimiss="modal"
+                            aria-label="close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="md-form mb-3">
+
+                            <label data-error="wrong" data-success="right" for="defaultForm-email"> Email
+                                address</label>
+                            <span id="res"></span> 
+                            <input type="email" id="txtEmail" class="form-control validate" placeholder="Enter Email-Id" required style="height: 50px;">
+                            <div id="errEmail" class="mt-2"></div>
+                        </div>
+
+                        <div class="md-form mb-3">
+                            <!-- <i class="fas fa-lock prefix grey-text"></i> -->
+                            <label data-error="wrong" data-success="right" for="Form-pass"> Password </label>
+                            <div style="display: flex;flex-direction: row;"> 
+                              <div>
+                               <input type="password" style="width: 390px;margin-right: 15px;" id="txtPwd" placeholder="Enter Password" class=" form-control validate"  required style="height: 50px">
+                              </div>
+                               <div>
+                                 <i class="fa-solid fa-eye " id="eyePwd2" aria-hidden="true"></i>
+                               </div>
+                             </div>
+                            <!-- <div>
+                              <input type="password" id="txtPwd" class=" form-control validate"  name="txtPwd"
+                              placeholder="Enter password" value="" required style="height: 50px;">
+                              <i class="fa bi-eye eye" aria-hidden="true"></i>
+                            </div> -->
+
+                            <div id="errPwd" class="mt-2"></div>
+                        </div>
+
+
+                        <div class="md-form mb-3">
+                            <label data-error="wrong" data-success="right" for="Form-pass"> User Type</label>
+                            <select id="seltype" class="form-control" required style="height: 50px;">
+                                <option selected value="">Select</option>
+                                <option value="Donor">Donor</option>
+                                <option value="Needy">Needy</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div style="padding:10px 0px 10px">
+                        <center>
+                            <form class="d-flex" role="search">
+                                <input class="btn btn-success" type="button" id="btnSignup" value="signup">
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- ================================================Login Model================================================================== -->
+    <form>
+        <div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="LoginPage" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal=title fs-5" id="LoginPage">Fill your details below</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="md-form mb-3">
+                            <!-- <i class="fas fa-envelope prefix grey-text"></i> -->
+                            <label data-error="wrong" data-success="right" for="defaultForm-email"> Email
+                                address</label>
+                            <input type="email" id="Form-email" placeholder="Enter Email-ID" class="form-control validate" required style="height: 50px;">
+                            <div id="err-Email" class="mt-2"></div>
+                        </div>
+
+
+                        <div class="md-form mb-3">
+                            <label data-error="wrong" data-success="right" for="defaultForm-pass">Password</label>
+                            <div style="display: flex;flex-direction: row;"> 
+                             <div>
+                              <input type="password" style="width: 390px;margin-right: 15px;" id="Form-pass" placeholder="Enter Password" class=" form-control validate"  required style="height: 50px">
+                             </div>
+                              <div>
+                                <i class="fa-solid fa-eye " id="eyePwd" aria-hidden="true"></i>
+                              </div>
+                            </div>
+                            <div id="errPwd" class="mt-2"></div>
+                        </div>
+
+                        <div style="padding:10px 0px 10px">
+                            <center>
+                                <input type="button" class="btn btn-success" value="Login" id="btnLogin">
+                            </center>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function () {
+        $("#eyePwd").click(function () {
+          var pwdField = $("#Form-pass");
+          var eyeIcon = $("#eyePwd");
+    
+          if (pwdField.attr("type") === "password") {
+            pwdField.attr("type", "text");
+            eyeIcon.removeClass("fa-eye").addClass("fa-eye-slash");
+          } else {
+            pwdField.attr("type", "password");
+            eyeIcon.removeClass("fa-eye-slash").addClass("fa-eye");
+          }
+        });
+
+        $("#eyePwd2").click(function () {
+          var pwdField = $("#txtPwd");
+          var eyeIcon = $("#eyePwd2");
+    
+          if (pwdField.attr("type") === "password") {
+            pwdField.attr("type", "text");
+            eyeIcon.removeClass("fa-eye").addClass("fa-eye-slash");
+          } else {
+            pwdField.attr("type", "password");
+            eyeIcon.removeClass("fa-eye-slash").addClass("fa-eye");
+          }
+        });
+      });
+    </script>
+  
+</body>
+
+</html>

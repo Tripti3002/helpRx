@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+ 
+    <script src="script/angular.min.js"></script>
+    <script>
+        var module=angular.module("myModule",[]);
+        module.controller("myController",function($scope,$http){
+               
+                $scope.jsonArray;
+
+                $scope.fetchRecords=function()
+                {
+                    var url="/get-needy-records";
+                    $http.get(url).then(done,fail);
+                    function done(response)
+                        {
+                            // alert(JSON.stringify(response.data));
+                            $scope.jsonArray=response.data;
+
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        }   
+                }
+
+                //==============================.
+                $scope.doDelete=function(email)
+                {
+                    if(confirm("R U Sure?")==false)
+                        return;
+                        var url="/do-needy-delete?emailkuch="+email;//+"&pwd="+pwdkuch;
+                        $http.get(url).then(done,fail);
+                        function done(response)
+                        {
+                           alert(response.data);
+                           $scope.fetchRecords();
+
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        }   
+
+                }
+                
+        })
+    </script>
+</head>
+<body ng-app="myModule" ng-controller="myController">
+    <div>
+        <nav class="navbar bg-body-tertiary" style="height: 80px;">
+            <div class="container-fluid"style="background-color: cornflowerblue">
+              <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+              <form class="d-flex" role="search">
+                <!-- <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button> -->
+                <!-- <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button" id="logoutbtn"  >Logout</button> -->
+              </form>
+            </div>
+          </nav>
+        </div>
+  
+     <center>  
+        
+         <input type="button" class="btn btn-primary" ng-click="fetchRecords();" value="fetchRecords">
+         <table width="800" border="1"  class="table table-striped table-hover" >
+                <tr>
+                    <th>Sr.No</th> <th>Email id</th> <th>Name</th><th>Mobile</th><th>Dob</th> <th>Gender</th> <th>City</th> <th>Address</th> <th>Picname</th> <th>Preview</th> <th>Operations</th>
+                    <tr ng-repeat="obj in jsonArray">
+                        <td>{{$index+1}}</td>
+                        <td>{{obj.email}}</td>
+                        <td>{{obj.name}}</td>
+                        <td>{{obj.mobile}}</td>
+                        <td>{{obj.dob}}</td>
+                        <td>{{obj.gender}}</td>
+                        <td>{{obj.city}}</td>
+                        <td>{{obj.address}}</td>
+                        <td>{{obj.picname}}</td>
+                        <td align="center">
+                            <img src="uploads/{{obj.picname}}" alt="" width="100" height="100">
+                        </td>
+                        <td align="center">
+                                 
+                                <input type="button" class="btn btn-primary" value="Delete" ng-click="doDelete(obj.email);">
+                                
+                        </td>
+                    </tr>
+                </tr>
+
+         </table>
+    </center>
+    
+</body>
+</html>

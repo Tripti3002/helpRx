@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script>
+        $(document).ready(function(){
+      $("#acEmail").html(localStorage.getItem("active"));
+          
+if(localStorage.getItem("active")==undefined)
+{
+  location.replace("/index.html");
+}
+
+   $("#logoutbtn").click(function(){
+
+   if( confirm("Are you Sure")==false)
+   {  
+      return;
+   }
+   localStorage.removeItem("active");
+   location.replace("/index.html");
+   })
+        })
+    </script>
+    <style>
+      .card{
+        transition: ease all 1s;
+      }
+      .card:hover{
+           transform: scale(.9);
+           transition: ease all 1s;
+      }
+    </style>
+
+  </head>
+  <body>
+
+
+    <div>
+      <nav class="navbar bg-body-tertiary" style="height: 80px;">
+          <div class="container-fluid"style="background-color: cornflowerblue">
+            <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+            <form class="d-flex" role="search">
+              <!-- <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button> -->
+              <!-- <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button" id="logoutbtn"  >Logout</button> -->
+            </form>
+          </div>
+        </nav>
+      </div>
+
+
+    <!-- <nav class="navbar navbar-expand-lg bg-primary ">
+        <div class="container-fluid" style="font-weight:bolder;">
+            <a class="navbar-brand text-white" href="#">donorbox</a>
+        </div>
+        
+    </nav> -->
+    <center>
+      <h1>Welcome: <span id="acEmail"></span></h1> 
+    </center>
+    <center>
+      <div class="container">
+    <div class="ms-3" style="margin-top: 10%;">
+      <div class="ps-5 pt-2 ms-5">
+        <div class="card ms-5" style="width: 20rem; float: left; box-shadow: 0px 0px 10px gray;"  >
+          <img src="pics/profile photo.jpg" width="100" height="" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Profile Form </h5>
+            <p class="card-text"></p>
+            <a href="needy-profile.html" class="btn btn-primary">Open Form </a>
+          </div>
+        </div>
+        <div class="card ms-5 " style="width: 21rem; float: left; box-shadow: 0px 0px 10px gray;">
+          <img src="pics/avail med.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Search Medicine</h5>
+            <p class="card-text"></p>
+            <a href="findmed.html" class="btn btn-primary">Search Medicine</a>
+          </div>
+        </div>
+      
+      
+        <div class="card ms-5" style="width: 17rem; float: left;box-shadow: 0px 0px 10px gray;">
+          <img src="pics/logout-icon-vector-illustration.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Logout</h5>
+            <p class="card-text"></p>
+            <button id="logoutbtn"  class="btn btn-primary">Logout</button>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+    </center>
+      
+      <br><br><br><br>
+
+      <!-- =====================Setting Modal===================== -->
+    <form>
+      <div class="modal fade " id="signupModal" tabindex="-1" aria-labelledby="SignupPage" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content ">
+                  <!-- <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="SignupPage">Fill your details below</h1>
+                      <button type="button" data-bs-dismiss="modal" class="btn-close" data-bs-dimiss="modal"
+                          aria-label="close"></button>
+                  </div> -->
+                  <nav style="height: 50px;" class="navbar navbar-expand-lg bg-primary ">
+                    <div class="container-fluid" style="font-weight:bolder ;">
+                        <a class="navbar-brand text-white" >Setting</a>
+                    </div>
+                  </nav>
+                  <div class="modal-body">
+                      <div class="md-form mb-2">
+
+                          <label data-error="wrong" data-success="right" for="defaultForm-email"> Email
+                              address</label>
+                          <input type="email" id="pEmail" class="form-control validate" value="" required style="height: 40px;">
+                          <div id="form-email" class="mt-2"></div>
+                      </div>
+
+                      <div class="md-form mb-2">
+                          <!-- <i class="fas fa-lock prefix grey-text"></i> -->
+                          <label data-error="wrong" data-success="right" for="Form-pass"> Old Password </label>
+                          <div>
+                              <!-- <i class="fa bi-eye eye" aria-hidden="true"></i> -->
+                              <input type="password" id="form-opass" class=" form-control validate" value="" required style="height: 40px;">
+                          </div>
+
+                          <div id="errPass" class="mt-2"></div>
+                      </div>
+
+                      <div class="md-form mb-2">
+                        <!-- <i class="fas fa-lock prefix grey-text"></i> -->
+                        <label data-error="wrong" data-success="right" for="Form-pass"> New Password </label>
+
+
+                        <div>
+                            <!-- <i class="fa bi-eye eye" aria-hidden="true"></i> -->
+                            <input type="password" id="form-npass" class=" form-control validate" value="" required style="height: 40px;">
+                        </div>
+
+                        <div id="errPass" class="mt-2"></div>
+                    </div>
+
+                  </div>
+                  <div style="padding:10px 0px 10px">
+                      <center>
+                          <form class="d-flex" role="search">
+                              <input c+2lass="btn btn-success" type="button" id="btnSignup" value="signup">
+                          </form>
+                      </center>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

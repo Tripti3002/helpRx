@@ -1,0 +1,178 @@
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Find Medicine</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+                crossorigin="anonymous">
+        <script src="script/angular.min.js"></script>
+
+        <script>
+                var module = angular.module("myModule", []);
+                module.controller("myController", function ($scope, $http) {
+                        $scope.selObj = "";
+                        $scope.selObjName = "";
+                        $scope.doFetchC = function () {
+                                var url = "/get-city-donor"
+                                $http.get(url).then(done, fail);
+                                function done(response) {
+                                        //    alert(JSON.stringify(response.data));
+                                        $scope.jsonArray = response.data;
+
+                                }
+                                function fail(response) {
+                                        alert(response.data);
+                                }
+                        }
+                        $scope.doFetcgMed = function () {
+                                var url = "/get-medname-donor"
+                                $http.get(url).then(done, fail);
+                                function done(response) {
+                                        //    alert(JSON.stringify(response.data));
+                                        $scope.jsonArrayName = response.data;
+
+                                }
+                                function fail(response) {
+                                        alert(response.data);
+                                }
+                        }
+                        $scope.fetchdata;
+                        $scope.showDonors = function () {
+                                // alert();
+                                alert($scope.selObj.city + "," + $scope.selObjName.medName);
+                                var url = "/fetchusr?city=" + $scope.selObj.city + "&med=" + $scope.selObjName.medName;
+                                $http.get(url).then(done, fail);
+                                function done(resp) {
+                                        // alert(JSON.stringify(resp.data));
+                                        $scope.fetchdata = resp.data;
+
+
+                                }
+                                function fail(err) {
+                                        alert(JSON.stringify(err.data));
+                                }
+                        }
+                        $scope.jsonArray;
+                        $scope.fetchdonor = function (email) {
+                                var url = "/get-user-records-findmed?emailkuch=" + email;
+                                //alert(url);
+                                $http.get(url).then(done, fail);
+                                function done(response) {
+                                        // alert(JSON.stringify(response.data));
+                                        $scope.jsonArray = response.data;
+                                }
+                                function fail(response) {
+                                        alert(response);
+                                }
+                        }
+                        $scope.selOneObj;
+                        $scope.doShowOne = function (selIndex) {
+                                $scope.selOneObj = $scope.fetchdata[selIndex];
+                        }
+
+                });
+        </script>
+
+</head>
+
+<body ng-app="myModule" ng-controller="myController" ng-init="doFetchC();doFetcgMed();">
+
+        <center>
+
+                <div>
+                        <nav class="navbar bg-body-tertiary" style="height: 80px;">
+                            <div class="container-fluid"style="background-color: cornflowerblue">
+                              <a class="navbar-brand" style="font-size: xx-large;"><b>HelpRx</b></a>
+                              <form class="d-flex" role="search">
+                                <!-- <button style="margin-right: 20px;font-size: x-large;" class="btn btn-outline-primary" type="button"  data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button> -->
+                                <!-- <button class="btn btn-outline-primary" style="font-size: x-large; margin-right: 10px;" type="button" id="logoutbtn"  >Logout</button> -->
+                              </form>
+                            </div>
+                          </nav>
+                        </div>
+                  
+                <!-- ======================================= -->
+                <br>
+                <div class="container">
+                        <div class="row">
+                                <div class="col-md-4 offset-2">
+                                        <p style="font-size: 20px;font-weight: bolder;">City:</p> <select
+                                                ng-options="obj.city  for obj in jsonArray" ng-model="selObj"
+                                                style="float: left;" class="form-control form-control-lg">
+                                                <option value="">Select</option>
+                                        </select>
+                                </div>
+                                <div class="col-md-4">
+                                        <p style="font-size: 20px;font-weight: bolder;">Medicine Name:</p> <select
+                                                ng-options="obj.medName  for obj in jsonArrayName" ng-model="selObjName"
+                                                style="float: left;" class="form-control form-control-lg">
+                                                <option value="">Select</option>
+                                        </select>
+                                </div>
+
+                                <div class="col-sm-2" style="margin-top: 10px;margin-left:42%;margin-bottom: 10px;">
+                                        <input type="button" class="btn btn-success mt-2" value="Search" id="btnSearch"
+                                                ng-click="showDonors();">
+                                </div>
+                        </div>
+                </div>
+
+
+                <!-- ----------------------------------------------------- -->
+                <div class="container">
+                        <div class="row">
+                                <div class="col-md-3" ng-repeat="obj in fetchdata">
+                                        <div class="card">
+                                                <img class="card-img-top" src="./pics/profile photo.jpg" alt="...">
+                                                <div class="card-body">
+                                                        <h5 class="card-title">{{obj.name}}</h5>
+                                                        <p class="card-text">{{obj.avail}}</p>
+                                                        <p class="card-text">{{obj.mobile}}</p>
+                                                        <input type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                                data-bs-target="#profiledonor" value="Details"
+                                                                ng-click="fetchdonor(obj.email);">
+                                                </div>
+                                        </div>
+                                </div>
+        
+                        </div>
+                </div>
+
+                <!-- !Modal For logout  -->
+                <div class="modal" tabindex="-1" id="profiledonor">
+                        <div class="modal-dialog">
+                                <div class="modal-content" ng-repeat="obj in jsonArray">
+                                        <div class="modal-header">
+                                                <h5 class="modal-title">Profile</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                                <p>Email: </p><span>{{obj.email}}</span>
+                                                <p>Name: </p><span>{{obj.name}}</span>
+                                                <p>City: </p><span>{{obj.city}}</span>
+                                                <p>Address: </p><span>{{obj.address}}</span>
+                                                <p>Mobile: </p><span>{{obj.mobile}}</span>
+                                                <p>Available Time: </p><span>{{obj.avail}}</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+        </center>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+                crossorigin="anonymous"></script>
+</body>
+
+</html>
